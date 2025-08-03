@@ -6,6 +6,18 @@ FROM            ghcr.io/parkervcp/yolks:debian
 LABEL           author="Michael Parker" maintainer="parker@pterodactyl.io"
 LABEL           org.opencontainers.image.licenses=MIT
 
+# Fix locale
+RUN apt update && \
+    apt install -y locales && \
+    sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 && \
+    echo 'LANG=en_US.UTF-8' > /etc/default/locale
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
 # Install required packages
 RUN             dpkg --add-architecture i386 \
                 && apt update -y \
